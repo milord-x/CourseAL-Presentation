@@ -1,0 +1,2106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CourseAL</title>
+<link rel="icon" type="image/png" href="assets/logo_rounded.png">
+<link rel="apple-touch-icon" href="assets/logo_rounded.png">
+<style>
+/* ─────────────────────────────────────────────────────────────────────
+   TOKENS
+───────────────────────────────────────────────────────────────────── */
+:root {
+  --bg:          #F5F7FB;
+  --bg-s:        #F5F7FB;
+  --card:        #FFFFFF;
+  --t1:          #0F172A;
+  --t2:          #64748B;
+  --t3:          #94A3B8;
+  --t4:          #CBD5E1;
+  --accent:      #4F46E5;
+  --accent-2:    #6366F1;
+  --violet:      #7C3AED;
+  --cyan:        #22D3EE;
+  --accent-bg:   #EEF2FF;
+  --accent-bd:   rgba(79,70,229,.18);
+  --border:      #E2E8F0;
+  --border-s:    #F1F5F9;
+  --sh0: 0 1px 2px rgba(15,23,42,.04);
+  --sh1: 0 1px 4px rgba(15,23,42,.05), 0 2px 8px rgba(15,23,42,.05);
+  --sh2: 0 4px 16px rgba(15,23,42,.08), 0 1px 4px rgba(15,23,42,.04);
+  --sh3: 0 12px 40px rgba(15,23,42,.10), 0 3px 10px rgba(15,23,42,.06);
+  --sh4: 0 24px 72px rgba(15,23,42,.13), 0 6px 18px rgba(15,23,42,.06);
+  --r1: 10px;
+  --r2: 16px;
+  --r3: 24px;
+  --r4: 32px;
+  --max: 1120px;
+  --f: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', system-ui, sans-serif;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   RESET
+───────────────────────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--f);background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+svg{display:block}
+
+/* ─────────────────────────────────────────────────────────────────────
+   REVEAL
+───────────────────────────────────────────────────────────────────── */
+.r{opacity:0;transform:translateY(22px);transition:opacity .6s cubic-bezier(.22,.68,0,1.1),transform .6s cubic-bezier(.22,.68,0,1.1)}
+.r.v{opacity:1;transform:none}
+.d1{transition-delay:.07s}.d2{transition-delay:.14s}.d3{transition-delay:.21s}
+.d4{transition-delay:.28s}.d5{transition-delay:.35s}.d6{transition-delay:.42s}
+
+/* ─────────────────────────────────────────────────────────────────────
+   NAV
+───────────────────────────────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  height:60px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 56px;
+  background:rgba(245,247,251,.92);
+  backdrop-filter:blur(20px) saturate(180%);
+  border-bottom:1px solid rgba(226,232,240,.8);
+}
+.nav-logo{display:flex;align-items:center;gap:9px;text-decoration:none}
+.nav-logo-mark{
+  width:28px;height:28px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;overflow:hidden;
+}
+.nav-logo-mark-inner{
+  font-size:7px;font-weight:700;color:var(--t3);letter-spacing:.02em;
+  user-select:none;line-height:1;text-align:center;
+}
+.nav-logo-name{font-size:14.5px;font-weight:700;letter-spacing:-.02em;color:var(--t1)}
+.nav-user{
+  display:flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:600;color:var(--t2);
+  background:var(--card);
+  border:1.5px solid var(--border);
+  border-radius:9px;padding:5px 13px 5px 7px;
+}
+.nav-avatar{
+  width:24px;height:24px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--violet));
+  display:flex;align-items:center;justify-content:center;
+  font-size:9.5px;font-weight:800;color:#fff;flex-shrink:0;
+  letter-spacing:-.02em;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   SLIDE BASE
+───────────────────────────────────────────────────────────────────── */
+section{
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding:112px 56px 80px;
+  position:relative;overflow:hidden;
+}
+section:nth-child(odd){background:var(--bg)}
+section:nth-child(even){background:var(--bg-s)}
+
+.wrap{max-width:var(--max);width:100%;margin:0 auto;position:relative;z-index:1}
+
+/* ─────────────────────────────────────────────────────────────────────
+   TYPOGRAPHY SYSTEM
+───────────────────────────────────────────────────────────────────── */
+.eyebrow{
+  display:inline-block;
+  font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--accent);background:var(--accent-bg);
+  padding:4px 11px;border-radius:100px;margin-bottom:20px;
+}
+.h1{font-size:clamp(42px,5.2vw,72px);font-weight:800;line-height:1.06;letter-spacing:-.04em;color:var(--t1)}
+.h2{font-size:clamp(32px,3.8vw,54px);font-weight:800;line-height:1.08;letter-spacing:-.035em;color:var(--t1)}
+.h3{font-size:clamp(26px,2.8vw,40px);font-weight:800;line-height:1.12;letter-spacing:-.03em;color:var(--t1)}
+.lead{font-size:clamp(15px,1.35vw,18px);font-weight:400;line-height:1.72;color:var(--t2);max-width:520px}
+.ac{color:var(--accent)}
+em{font-style:normal;color:var(--t1);font-weight:700}
+
+/* ─────────────────────────────────────────────────────────────────────
+   BUTTONS
+───────────────────────────────────────────────────────────────────── */
+.btns{display:flex;gap:11px;flex-wrap:wrap;margin-top:34px}
+.btn-a{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:13.5px;font-weight:600;color:#fff;
+  background:var(--accent);
+  padding:11px 24px;border-radius:var(--r1);
+  border:none;cursor:default;
+  box-shadow:0 3px 12px rgba(79,70,229,.30);
+  text-decoration:none;
+}
+.btn-b{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:13.5px;font-weight:600;color:var(--t1);
+  background:var(--card);
+  padding:11px 24px;border-radius:var(--r1);
+  border:1.5px solid var(--border);cursor:default;text-decoration:none;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   DECORATIVE GLOW BLOBS
+───────────────────────────────────────────────────────────────────── */
+.glow{position:absolute;pointer-events:none;z-index:0;border-radius:50%;filter:blur(72px)}
+.glow-a{top:-80px;right:-120px;width:560px;height:560px;
+  background:conic-gradient(from 210deg at 60% 40%,rgba(124,58,237,.11) 0deg,rgba(79,70,229,.14) 80deg,rgba(34,211,238,.06) 170deg,transparent 260deg)}
+.glow-b{bottom:100px;left:-60px;width:440px;height:440px;
+  background:radial-gradient(ellipse,rgba(79,70,229,.07) 0%,transparent 68%)}
+.glow-dark-a{top:-100px;left:-60px;width:500px;height:500px;
+  background:radial-gradient(ellipse,rgba(79,70,229,.18) 0%,transparent 60%);filter:blur(80px)}
+.glow-dark-b{bottom:-80px;right:-80px;width:420px;height:420px;
+  background:radial-gradient(ellipse,rgba(124,58,237,.14) 0%,transparent 60%);filter:blur(80px)}
+
+/* ─────────────────────────────────────────────────────────────────────
+   IPHONE 14 PRO
+───────────────────────────────────────────────────────────────────── */
+.phone-outer{
+  position:relative;
+  width:270px;height:583px;flex-shrink:0;
+}
+.phone-frame{
+  position:absolute;inset:0;
+  background:#0C111D;
+  border-radius:50px;
+  box-shadow:
+    0 0 0 1.5px #1E2A3A,
+    0 0 0 3px #263347,
+    var(--sh4),
+    inset 0 0 0 1px rgba(255,255,255,.05);
+}
+/* Side buttons */
+.phone-btn-vol{
+  position:absolute;left:-4px;top:115px;
+  width:4px;height:30px;
+  background:#1E2A3A;border-radius:2px 0 0 2px;
+  box-shadow:0 42px 0 #1E2A3A,0 80px 0 #1E2A3A;
+}
+.phone-btn-pwr{
+  position:absolute;right:-4px;top:138px;
+  width:4px;height:58px;
+  background:#1E2A3A;border-radius:0 2px 2px 0;
+}
+/* Screen cutout */
+.phone-screen{
+  position:absolute;
+  top:4px;left:4px;right:4px;bottom:4px;
+  border-radius:46px;
+  background:#F5F7FB;
+  overflow:hidden;
+}
+/* Dynamic island */
+.phone-island{
+  position:absolute;top:13px;left:50%;transform:translateX(-50%);
+  width:108px;height:30px;
+  background:#000;border-radius:20px;z-index:30;
+  display:flex;align-items:center;justify-content:flex-end;
+  padding-right:8px;gap:4px;
+}
+.phone-island-cam{
+  width:10px;height:10px;border-radius:50%;
+  background:#111827;border:2px solid #1f2937;
+  box-shadow:inset 0 0 0 2px #0a0e14;
+}
+/* Status bar */
+.phone-status{
+  position:absolute;top:13px;left:0;right:0;z-index:20;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;height:40px;
+}
+.phone-time{font-size:12.5px;font-weight:700;color:var(--t1)}
+.phone-status-icons{display:flex;align-items:center;gap:3px}
+/* App content starts below island */
+.phone-content{
+  position:absolute;
+  top:54px;left:0;right:0;bottom:0;
+  overflow:hidden;
+  display:flex;flex-direction:column;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   APP UI
+───────────────────────────────────────────────────────────────────── */
+.app-topbar{
+  padding:8px 16px 7px;
+  background:var(--card);
+  border-bottom:1px solid var(--border-s);
+  flex-shrink:0;
+}
+.app-greeting{font-size:10px;color:var(--t3);font-weight:500;margin-bottom:1px}
+.app-brand{font-size:15px;font-weight:800;color:var(--t1);letter-spacing:-.025em}
+
+.app-body{flex:1;overflow:hidden;padding:10px 13px 0;background:var(--bg)}
+
+.app-micro-label{
+  font-size:8.5px;font-weight:700;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--t3);margin-bottom:6px;
+}
+
+/* Course card */
+.app-course{
+  background:linear-gradient(140deg,#4F46E5 0%,#7C3AED 100%);
+  border-radius:14px;padding:13px 14px;margin-bottom:9px;
+  position:relative;overflow:hidden;
+}
+.app-course::after{
+  content:'';position:absolute;top:-18px;right:-18px;
+  width:72px;height:72px;border-radius:50%;
+  background:rgba(255,255,255,.06);
+}
+.app-course-badge{
+  font-size:7.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  color:rgba(255,255,255,.6);margin-bottom:4px;
+}
+.app-course-title{font-size:12.5px;font-weight:800;color:#fff;line-height:1.3;margin-bottom:2px}
+.app-course-meta{font-size:9px;color:rgba(255,255,255,.55);margin-bottom:10px}
+.app-pb-track{height:4px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden}
+.app-pb-fill{height:100%;border-radius:99px;background:rgba(255,255,255,.82)}
+.app-pb-pct{font-size:8px;color:rgba(255,255,255,.55);text-align:right;margin-top:3px}
+
+/* Image placeholder */
+.app-image-placeholder{
+  width:100%;height:115px;
+  border-radius:11px;margin-bottom:9px;
+  background:linear-gradient(135deg,#E8EDF5 0%,#EEF2FF 100%);
+  border:1.5px dashed #C7D0E0;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  /* To use a real image: set background-image: url('data:image/...') here
+     and add background-size:cover; background-position:center; */
+}
+.app-image-placeholder::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    -45deg,transparent,transparent 7px,
+    rgba(199,208,224,.28) 7px,rgba(199,208,224,.28) 8px
+  );
+}
+.app-image-placeholder-inner{
+  position:relative;z-index:1;text-align:center;
+}
+.app-image-placeholder-inner span{
+  font-size:8px;font-weight:600;color:#94A3B8;line-height:1.6;display:block;
+}
+
+/* Lessons */
+.app-lessons{display:flex;flex-direction:column;gap:4px}
+.app-lesson{
+  display:flex;align-items:center;gap:7px;
+  background:var(--card);border:1px solid var(--border-s);
+  border-radius:9px;padding:7px 10px;
+}
+.app-lesson.al-on{background:var(--accent-bg);border-color:var(--accent-bd)}
+.app-lesson-dot{
+  width:16px;height:16px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:7px;font-weight:900;
+}
+.ald-done{background:#DCFCE7;color:#16A34A}
+.ald-on  {background:var(--accent);color:#fff}
+.ald-todo{background:var(--border);color:var(--t3)}
+.app-lesson-name{font-size:10px;font-weight:500;flex:1;line-height:1.3}
+.app-lesson-name.aln-on{color:var(--accent);font-weight:700}
+.app-lesson-name.aln-done{color:var(--t3)}
+
+/* Bottom tab */
+.app-tabs{
+  display:flex;justify-content:space-around;align-items:center;
+  padding:7px 0 10px;
+  background:var(--card);border-top:1px solid var(--border-s);
+  flex-shrink:0;
+}
+.app-tab{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:default}
+.app-tab-lbl{font-size:7.5px;font-weight:600;color:var(--t3)}
+.app-tab.at-a .app-tab-lbl{color:var(--accent)}
+
+/* ─────────────────────────────────────────────────────────────────────
+   SLIDE 1 — HERO
+───────────────────────────────────────────────────────────────────── */
+#s1{background:var(--bg)}
+.hero-grid{
+  display:grid;
+  grid-template-columns:1fr 300px;
+  gap:64px;
+  align-items:center;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   SLIDE 2 — PROBLEM
+───────────────────────────────────────────────────────────────────── */
+.prob-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.prob-points{display:flex;flex-direction:column;gap:16px;margin-top:32px}
+.prob-point{
+  display:flex;gap:15px;align-items:flex-start;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r2);box-shadow:var(--sh1);padding:18px 22px;
+}
+.prob-num{font-size:10.5px;font-weight:800;letter-spacing:.05em;color:var(--accent);min-width:24px;margin-top:2px}
+.prob-body{font-size:14.5px;line-height:1.58;color:var(--t2)}
+.prob-body strong{display:block;color:var(--t1);font-size:14.5px;margin-bottom:1px}
+/* Right stat panel */
+.prob-panel{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r4);box-shadow:var(--sh3);padding:34px 28px;
+}
+.prob-panel-label{
+  font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--t3);margin-bottom:20px;
+}
+.prob-row{
+  display:flex;align-items:center;gap:12px;
+  padding:13px 0;border-bottom:1px solid var(--border-s);
+}
+.prob-row:last-child{border-bottom:none;padding-bottom:0}
+.prob-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.prob-row-t{font-size:12.5px;font-weight:500;color:var(--t2);flex:1}
+.prob-badge{
+  font-size:9px;font-weight:700;padding:3px 9px;border-radius:100px;
+  white-space:nowrap;
+}
+.prob-stat{
+  margin-top:24px;padding:18px;background:var(--accent-bg);
+  border-radius:var(--r2);text-align:center;
+}
+.prob-stat-n{font-size:46px;font-weight:900;line-height:1;color:var(--accent);letter-spacing:-.04em}
+.prob-stat-s{font-size:11px;color:var(--t2);margin-top:4px;line-height:1.45}
+
+/* ─────────────────────────────────────────────────────────────────────
+   SLIDE 3 — BEHAVIOR
+───────────────────────────────────────────────────────────────────── */
+.flow-center{display:flex;flex-direction:column;align-items:center;text-align:center}
+.flow-track{
+  display:flex;align-items:center;justify-content:center;
+  margin-top:56px;gap:0;flex-wrap:nowrap;
+}
+.flow-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r3);box-shadow:var(--sh2);
+  padding:28px 18px 24px;width:162px;flex-shrink:0;
+  text-align:center;position:relative;
+}
+.flow-n{
+  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+  width:24px;height:24px;border-radius:50%;
+  background:var(--accent);color:#fff;
+  font-size:10.5px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 8px rgba(79,70,229,.28);
+}
+.flow-ico{font-size:28px;margin-bottom:11px}
+.flow-t{font-size:13.5px;font-weight:700;color:var(--t1);margin-bottom:4px}
+.flow-d{font-size:11.5px;color:var(--t2);line-height:1.45}
+.flow-sep{
+  width:44px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--t3);font-size:16px;
+}
+.flow-verdict{
+  margin-top:48px;
+  display:inline-flex;align-items:center;gap:10px;
+  background:#FEF2F2;border:1px solid #FECACA;
+  border-radius:var(--r2);padding:13px 26px;
+}
+.flow-verdict-dot{width:8px;height:8px;border-radius:50%;background:#EF4444;flex-shrink:0}
+.flow-verdict-t{font-size:13.5px;font-weight:600;color:#991B1B}
+
+/* ─────────────────────────────────────────────────────────────────────
+   SLIDE 4 — SOLUTION
+───────────────────────────────────────────────────────────────────── */
+.sol-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.sol-pillars{display:flex;flex-direction:column;gap:13px;margin-top:30px}
+.sol-p{
+  display:flex;align-items:center;gap:15px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r2);box-shadow:var(--sh1);padding:17px 21px;
+}
+.sol-p-ico{
+  width:42px;height:42px;border-radius:11px;
+  background:var(--accent-bg);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+}
+.sol-p-t{font-size:14.5px;font-weight:700;color:var(--t1);margin-bottom:2px}
+.sol-p-d{font-size:12px;color:var(--t2);line-height:1.45}
+/* Right: mini product card */
+.sol-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r4);box-shadow:var(--sh3);padding:28px;
+  position:relative;overflow:hidden;
+}
+.sol-ribbon{
+  position:absolute;top:0;right:0;width:150px;height:150px;
+  background:conic-gradient(from 180deg,rgba(79,70,229,.07),rgba(124,58,237,.04),transparent);
+  border-radius:0 var(--r4) 0 200px;pointer-events:none;
+}
+.sol-ch{display:flex;align-items:center;gap:11px;margin-bottom:18px}
+.sol-cb{
+  width:38px;height:38px;border-radius:9px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--accent),var(--violet));
+  display:flex;align-items:center;justify-content:center;font-size:17px;
+}
+.sol-ct{font-size:13.5px;font-weight:700;color:var(--t1)}
+.sol-cs{font-size:11px;color:var(--t2)}
+.sol-ls{display:flex;flex-direction:column;gap:6px}
+.sol-l{
+  display:flex;align-items:center;gap:9px;
+  padding:9px 11px;border-radius:9px;
+  background:var(--bg);border:1px solid var(--border-s);
+}
+.sol-l.sl-a{background:var(--accent-bg);border-color:var(--accent-bd)}
+.sol-lc{
+  width:17px;height:17px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:7.5px;font-weight:900;
+}
+.slc-d{background:#DCFCE7;color:#16A34A}
+.slc-a{background:var(--accent);color:#fff}
+.slc-t{background:var(--border);color:var(--t3)}
+.sol-ln{font-size:11.5px;font-weight:500;flex:1}
+.sol-ln.sln-a{color:var(--accent);font-weight:700}
+.sol-ln.sln-d{color:var(--t3)}
+.sol-dur{font-size:9.5px;color:var(--t3)}
+.sol-prog{margin-top:16px;padding-top:14px;border-top:1px solid var(--border-s)}
+.sol-phd{display:flex;justify-content:space-between;margin-bottom:6px}
+.sol-pl{font-size:11px;font-weight:600;color:var(--t2)}
+.sol-pv{font-size:12px;font-weight:800;color:var(--accent)}
+.pb{height:5px;background:var(--border);border-radius:99px;overflow:hidden}
+.pbf{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+
+/* ─────────────────────────────────────────────────────────────────────
+   SLIDE 5 — HOW IT WORKS
+───────────────────────────────────────────────────────────────────── */
+.arch-center{display:flex;flex-direction:column;align-items:center}
+.arch-hd{text-align:center;max-width:600px}
+.arch-flow{
+  display:flex;align-items:center;gap:0;
+  margin-top:60px;width:100%;max-width:960px;
+}
+.arch-step{
+  flex:1;background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r3);box-shadow:var(--sh2);padding:26px 20px;text-align:center;
+}
+.arch-n{
+  width:33px;height:33px;border-radius:50%;
+  background:var(--accent-bg);color:var(--accent);
+  font-size:13px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;margin:0 auto 13px;
+}
+.arch-ico{font-size:26px;margin-bottom:11px}
+.arch-t{font-size:13.5px;font-weight:800;color:var(--t1);margin-bottom:5px}
+.arch-d{font-size:11.5px;color:var(--t2);line-height:1.5}
+.arch-arr{
+  width:48px;flex-shrink:0;position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.arch-arr::before{
+  content:'';position:absolute;top:50%;left:0;right:0;height:1.5px;
+  background:linear-gradient(90deg,var(--border),rgba(79,70,229,.35),var(--border));
+  transform:translateY(-50%);
+}
+.arch-arr-head{
+  position:relative;z-index:1;
+  width:22px;height:22px;border-radius:50%;
+  background:var(--card);border:1.5px solid rgba(79,70,229,.22);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;color:var(--accent);
+}
+.arch-note{
+  margin-top:44px;background:var(--card);
+  border:1px solid var(--border);border-radius:var(--r2);box-shadow:var(--sh1);
+  padding:17px 30px;max-width:620px;text-align:center;
+  font-size:14.5px;color:var(--t2);line-height:1.65;
+}
+.arch-note strong{color:var(--t1)}
+
+/* ─────────────────────────────────────────────────────────────────────
+   SLIDE 6 — MVP
+───────────────────────────────────────────────────────────────────── */
+.mvp-grid{display:grid;grid-template-columns:5fr 4fr;gap:80px;align-items:center}
+.mvp-checks{display:flex;flex-direction:column;gap:12px;margin-top:32px}
+.mvp-check{
+  display:flex;align-items:center;gap:14px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r2);box-shadow:var(--sh1);padding:16px 20px;
+}
+.mvp-ico{
+  width:30px;height:30px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:14px;
+}
+.mvp-ico.mi-done{background:#DCFCE7}
+.mvp-t{font-size:14px;font-weight:600;color:var(--t1)}
+.mvp-badge-wrap{
+  margin-left:auto;
+}
+.mvp-badge{
+  font-size:9px;font-weight:700;padding:3px 9px;
+  border-radius:100px;
+  background:var(--accent-bg);color:var(--accent);
+  white-space:nowrap;
+}
+.mvp-panel{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r4);box-shadow:var(--sh3);padding:36px 32px;text-align:center;
+}
+.mvp-live{
+  display:inline-flex;align-items:center;gap:7px;
+  background:#DCFCE7;color:#16A34A;
+  font-size:11px;font-weight:700;
+  padding:5px 14px;border-radius:100px;margin-bottom:24px;
+}
+.mvp-live-dot{width:7px;height:7px;border-radius:50%;background:#16A34A;flex-shrink:0}
+.mvp-big-l{font-size:12px;font-weight:600;color:var(--t3);margin-bottom:5px}
+.mvp-big{font-size:58px;font-weight:900;color:var(--t1);letter-spacing:-.05em;line-height:1}
+.mvp-big-s{font-size:13px;color:var(--t2);margin-top:4px}
+.mvp-sep{width:38px;height:2px;background:var(--border);margin:22px auto}
+.mvp-metrics{display:flex;justify-content:center;gap:28px}
+.mvp-m-v{font-size:22px;font-weight:800;color:var(--accent)}
+.mvp-m-l{font-size:10px;color:var(--t3);font-weight:500;margin-top:2px}
+
+/* ─────────────────────────────────────────────────────────────────────
+   SLIDE 7 — ARCHITECTURE
+───────────────────────────────────────────────────────────────────── */
+.tech-center{display:flex;flex-direction:column;align-items:center}
+.tech-hd{text-align:center;max-width:580px;margin-bottom:56px}
+.tech-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;width:100%}
+.tech-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r3);box-shadow:var(--sh2);padding:32px 26px 28px;
+  text-align:center;position:relative;overflow:hidden;
+}
+.tech-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  border-radius:var(--r3) var(--r3) 0 0;
+}
+.tc-flutter::before{background:linear-gradient(90deg,#0468D7,#54C5F8)}
+.tc-supabase::before{background:linear-gradient(90deg,#3ECF8E,#1A7A4A)}
+.tc-yt::before{background:linear-gradient(90deg,#FF0000,#FF6B6B)}
+.tech-logo{
+  width:64px;height:64px;border-radius:18px;
+  margin:0 auto 18px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;
+}
+.tech-name{font-size:18px;font-weight:800;color:var(--t1);margin-bottom:6px;letter-spacing:-.025em}
+.tech-role{font-size:13px;font-weight:600;color:var(--accent);margin-bottom:10px}
+.tech-desc{font-size:12.5px;color:var(--t2);line-height:1.55}
+.tech-tag{
+  display:inline-block;margin-top:14px;
+  font-size:9.5px;font-weight:700;padding:3px 10px;
+  border-radius:100px;letter-spacing:.05em;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   SLIDE 8 — LIMITATIONS  (dark)
+───────────────────────────────────────────────────────────────────── */
+#s8{background:var(--t1)}
+#s8 .eyebrow{background:rgba(255,255,255,.08);color:#A5B4FC}
+#s8 .h2{color:#fff}
+#s8 .lead{color:#94A3B8}
+.lim-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.lim-cards{display:flex;flex-direction:column;gap:14px}
+.lim-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:var(--r2);padding:20px 24px;
+}
+.lim-card-hd{display:flex;align-items:center;gap:11px;margin-bottom:8px}
+.lim-card-ico{
+  width:32px;height:32px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:15px;
+}
+.lim-card-t{font-size:14.5px;font-weight:700;color:#E2E8F0}
+.lim-card-d{font-size:12.5px;color:#64748B;line-height:1.55}
+.lim-reason{
+  margin-top:28px;padding:22px 26px;
+  background:rgba(79,70,229,.12);
+  border:1px solid rgba(79,70,229,.2);
+  border-radius:var(--r2);
+  font-size:14px;color:#94A3B8;line-height:1.65;
+}
+.lim-reason strong{color:#A5B4FC}
+/* Right panel */
+.lim-panel{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:var(--r3);padding:36px 30px;
+}
+.lim-panel-title{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#475569;margin-bottom:22px}
+.lim-row{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:14px 0;border-bottom:1px solid rgba(255,255,255,.05);
+}
+.lim-row:last-child{border-bottom:none;padding-bottom:0}
+.lim-row-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.lim-row-body{}
+.lim-row-t{font-size:13px;font-weight:600;color:#CBD5E1;margin-bottom:2px}
+.lim-row-d{font-size:11.5px;color:#475569;line-height:1.45}
+.lim-scope{
+  margin-top:24px;padding:16px 18px;
+  background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.15);
+  border-radius:var(--r2);text-align:center;
+}
+.lim-scope-v{font-size:14px;font-weight:700;color:#34D399;margin-bottom:3px}
+.lim-scope-s{font-size:11px;color:#475569}
+
+/* ─────────────────────────────────────────────────────────────────────
+   SLIDE 9 — CONCLUSION
+───────────────────────────────────────────────────────────────────── */
+.concl-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.concl-points{display:flex;flex-direction:column;gap:22px;margin-top:32px}
+.concl-point{display:flex;gap:18px;align-items:flex-start}
+.concl-bar{
+  width:3px;height:54px;flex-shrink:0;margin-top:3px;
+  background:linear-gradient(to bottom,var(--accent),transparent);border-radius:2px;
+}
+.concl-text{font-size:17px;line-height:1.58;color:var(--t2)}
+.concl-text strong{color:var(--t1)}
+.concl-panel{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r4);box-shadow:var(--sh3);padding:36px 30px;
+}
+.concl-panel-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-bottom:20px}
+.concl-check-row{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 0;border-bottom:1px solid var(--border-s);
+}
+.concl-check-row:last-child{border-bottom:none;padding-bottom:0}
+.concl-check-ico{
+  width:28px;height:28px;border-radius:7px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:13px;
+}
+.concl-check-t{font-size:13px;font-weight:600;color:var(--t1)}
+.concl-check-s{font-size:11px;color:var(--t2);margin-top:1px}
+.concl-quote{
+  margin-top:24px;padding:18px 22px;
+  background:var(--accent-bg);
+  border-left:3px solid var(--accent);
+  border-radius:0 var(--r2) var(--r2) 0;
+  font-size:14px;color:var(--t2);line-height:1.65;
+}
+.concl-quote strong{color:var(--accent)}
+
+/* ─────────────────────────────────────────────────────────────────────
+   SLIDE 10 — NEXT STEPS
+───────────────────────────────────────────────────────────────────── */
+.next-center{display:flex;flex-direction:column;align-items:center}
+.next-hd{text-align:center;max-width:580px;margin-bottom:56px}
+.next-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;width:100%;position:relative}
+.next-grid::before{
+  content:'';position:absolute;top:40px;left:8%;right:8%;height:1.5px;
+  background:linear-gradient(90deg,transparent,var(--accent),var(--violet),#0891B2,transparent);z-index:0;
+}
+.next-item{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center}
+.next-node{
+  width:48px;height:48px;border-radius:50%;
+  background:var(--card);border:2px solid var(--border);
+  box-shadow:var(--sh2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;margin-bottom:16px;
+}
+.next-item:nth-child(1) .next-node{border-color:var(--accent);box-shadow:0 0 0 4px rgba(79,70,229,.1)}
+.next-item:nth-child(2) .next-node{border-color:var(--violet);box-shadow:0 0 0 4px rgba(124,58,237,.1)}
+.next-item:nth-child(3) .next-node{border-color:#0891B2;box-shadow:0 0 0 4px rgba(34,211,238,.1)}
+.next-item:nth-child(4) .next-node{border-color:#10B981;box-shadow:0 0 0 4px rgba(16,185,129,.1)}
+.next-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r3);box-shadow:var(--sh2);padding:22px 20px;width:100%;
+}
+.next-t{font-size:14px;font-weight:700;color:var(--t1);margin-bottom:6px}
+.next-d{font-size:12px;color:var(--t2);line-height:1.5}
+.next-tag{
+  display:inline-block;font-size:9.5px;font-weight:700;
+  padding:3px 9px;border-radius:100px;margin-top:10px;letter-spacing:.04em;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   SLIDE 11 — MONETIZATION
+───────────────────────────────────────────────────────────────────── */
+.mono-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.mono-statement{
+  font-size:clamp(20px,2.2vw,28px);
+  font-weight:700;line-height:1.42;letter-spacing:-.02em;color:var(--t1);
+}
+.mono-note{
+  margin-top:26px;padding:20px 24px;
+  background:var(--accent-bg);
+  border-left:3px solid var(--accent);
+  border-radius:0 var(--r2) var(--r2) 0;
+  font-size:14px;color:var(--t2);line-height:1.65;
+}
+.mono-cards{display:flex;flex-direction:column;gap:14px}
+.mono-tier{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r3);box-shadow:var(--sh2);
+  padding:22px 26px;
+  position:relative;overflow:hidden;
+}
+.mono-tier-bar{
+  position:absolute;left:0;top:0;bottom:0;width:3px;
+  border-radius:var(--r1) 0 0 var(--r1);
+}
+.mono-tier-hd{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.mono-tier-ico{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:17px;
+}
+.mono-tier-name{font-size:15px;font-weight:800;color:var(--t1);margin-bottom:1px}
+.mono-tier-price{font-size:11px;color:var(--t2)}
+.mono-tier-d{font-size:12.5px;color:var(--t2);line-height:1.5}
+
+/* ─────────────────────────────────────────────────────────────────────
+   SLIDE 12 — CLOSING  (dark)
+───────────────────────────────────────────────────────────────────── */
+#s12{background:var(--t1)}
+.closing-bg-glow{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 20% 50%,rgba(79,70,229,.15) 0%,transparent 52%),
+    radial-gradient(ellipse at 80% 50%,rgba(124,58,237,.12) 0%,transparent 52%);
+}
+.closing-center{
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  position:relative;z-index:1;
+}
+.closing-mark{
+  width:60px;height:60px;border-radius:18px;
+  background:linear-gradient(135deg,var(--accent),var(--violet));
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 22px;
+  box-shadow:0 8px 28px rgba(79,70,229,.38);
+}
+.closing-h{
+  font-size:clamp(36px,4.5vw,62px);
+  font-weight:800;line-height:1.07;letter-spacing:-.04em;
+  color:#fff;max-width:680px;
+}
+.closing-sub{
+  font-size:18px;color:#94A3B8;
+  max-width:440px;line-height:1.75;margin-top:22px;
+}
+.closing-sub strong{color:#E2E8F0}
+.closing-divider{
+  width:1px;height:58px;
+  background:linear-gradient(to bottom,transparent,rgba(79,70,229,.65),transparent);
+  margin:42px 0;
+}
+.closing-brand{font-size:24px;font-weight:800;letter-spacing:-.04em;color:#fff;margin-bottom:5px}
+.closing-tag-line{font-size:13px;color:#475569}
+#s12 .eyebrow{background:rgba(255,255,255,.07);color:#A5B4FC}
+
+/* ─────────────────────────────────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────────────────────────────────── */
+@media(max-width:920px){
+  nav{padding:0 24px}
+  section{padding:96px 24px 60px}
+  .hero-grid,
+  .prob-grid,
+  .sol-grid,
+  .mvp-grid,
+  .lim-grid,
+  .concl-grid,
+  .mono-grid{grid-template-columns:1fr;gap:40px}
+  .hero-grid .phone-outer{display:none}
+  .tech-grid{grid-template-columns:1fr}
+  .next-grid{grid-template-columns:1fr 1fr}
+  .next-grid::before{display:none}
+  .flow-track{overflow-x:auto;padding-bottom:12px}
+  .arch-flow{flex-direction:column;max-width:380px}
+  .arch-arr{width:100%;height:34px}
+  .arch-arr::before{
+    top:0;bottom:0;left:50%;right:auto;
+    width:1.5px;height:auto;
+    background:linear-gradient(to bottom,var(--border),rgba(79,70,229,.35),var(--border));
+    transform:translateX(-50%);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   IPHONE MOCKUP (from mockup_iphone.html)
+───────────────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+.phone-mockup-outer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  width: 290px;
+  height: 600px;
+  flex-shrink: 0;
+  overflow: visible;
+  position: relative;
+}
+.phone-mockup-scale {
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: scale(0.72);
+  transform-origin: top right;
+}
+
+/* phone-wrap */
+.phone-wrap {
+  position: relative;
+  padding: 0 4px;
+  filter: drop-shadow(0 40px 80px rgba(0,0,0,0.20)) drop-shadow(0 10px 24px rgba(0,0,0,0.12));
+}
+.btn-mute  { position:absolute; left:0; top:116px; width:4px; height:30px; background:linear-gradient(90deg,#555,#888,#555); border-radius:3px 0 0 3px; }
+.btn-vup   { position:absolute; left:0; top:164px; width:4px; height:58px; background:linear-gradient(90deg,#555,#888,#555); border-radius:3px 0 0 3px; }
+.btn-vdn   { position:absolute; left:0; top:238px; width:4px; height:58px; background:linear-gradient(90deg,#555,#888,#555); border-radius:3px 0 0 3px; }
+.btn-pwr   { position:absolute; right:0; top:188px; width:4px; height:76px; background:linear-gradient(270deg,#555,#888,#555); border-radius:0 3px 3px 0; }
+
+.iphone {
+  position: relative;
+  width: 390px;
+  height: 844px;
+  border-radius: 54px;
+  background: linear-gradient(150deg, #3c3c3e 0%, #1c1c1e 40%, #2c2c2e 70%, #3c3c3e 100%);
+  box-shadow:
+    inset 0 0 0 1.5px rgba(255,255,255,0.18),
+    inset 0 0 0 3px rgba(0,0,0,0.6),
+    0 0 0 1px #000;
+  overflow: visible;
+}
+.iphone::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 54px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.10) 0%, transparent 50%, rgba(255,255,255,0.04) 100%);
+  pointer-events: none;
+  z-index: 999;
+}
+.bezel {
+  position: absolute;
+  top: 7px; left: 7px; right: 7px; bottom: 7px;
+  background: #000;
+  border-radius: 48px;
+  overflow: hidden;
+}
+.screen {
+  position: absolute;
+  top: 2px; left: 2px; right: 2px; bottom: 2px;
+  background: #eef0f5;
+  border-radius: 46px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.island {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 122px;
+  height: 35px;
+  background: #000;
+  border-radius: 18px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  pointer-events: none;
+}
+.island-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: #0d0d0d;
+  box-shadow: 0 0 6px rgba(60,150,255,0.5);
+}
+.island-cam {
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: #111;
+  box-shadow: 0 0 0 2px #1e2028, inset 0 0 4px rgba(60,120,255,0.4);
+}
+.statusbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 59px;
+  padding: 0 22px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+.sb-time { font-size:15px; font-weight:800; color:#111; letter-spacing:-0.3px; }
+.sb-icons { display:flex; align-items:center; gap:6px; }
+
+.scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+.scroll::-webkit-scrollbar { display: none; }
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 18px 14px;
+}
+.logo-box {
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #6c63ff, #9b87f5);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 3px 10px rgba(108,99,255,0.35);
+  flex-shrink: 0;
+}
+.logo-box img { width:100%; height:100%; object-fit:cover; }
+.app-title { font-size:18px; font-weight:800; color:#111; font-family:'Nunito',sans-serif; }
+
+.hero {
+  margin: 0 14px 18px;
+  background: linear-gradient(135deg, #6c63ff 0%, #9683f5 55%, #c4b5fd 100%);
+  border-radius: 20px;
+  padding: 18px 18px 22px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 28px rgba(108,99,255,0.28);
+}
+.hero::before {
+  content:'';
+  position:absolute; top:-35px; right:-25px;
+  width:130px; height:130px;
+  background:rgba(255,255,255,0.08);
+  border-radius:50%;
+}
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.2);
+  color: white;
+  font-size: 11px; font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(255,255,255,0.28);
+  font-family:'Nunito',sans-serif;
+}
+.hero h2 { font-size:24px; font-weight:900; color:white; line-height:1.2; margin-bottom:6px; font-family:'Nunito',sans-serif; }
+.hero p  { font-size:12px; color:rgba(255,255,255,0.85); line-height:1.5; font-family:'Nunito',sans-serif; }
+
+.filters { display:flex; gap:10px; padding:0 18px 16px; }
+.fbtn {
+  padding: 8px 20px; border-radius:30px;
+  font-size:13px; font-weight:700;
+  border: none; cursor:pointer;
+  font-family:'Nunito',sans-serif;
+}
+.fbtn.on  { background:#6c63ff; color:white; box-shadow:0 4px 12px rgba(108,99,255,0.35); }
+.fbtn.off { background:white; color:#333; box-shadow:0 2px 8px rgba(0,0,0,0.09); }
+
+.sec-title { font-size:19px; font-weight:900; color:#111; padding:0 18px 12px; font-family:'Nunito',sans-serif; }
+
+.card {
+  margin: 0 14px 14px;
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+}
+.thumb { width:100%; height:160px; display:flex; }
+.thumb-l { width:50%; height:100%; display:flex; align-items:center; justify-content:center; position:relative; }
+.thumb-r { width:50%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; }
+.t-badge { position:absolute; top:9px; left:9px; background:rgba(255,255,255,0.15); color:white; font-size:10px; font-weight:700; padding:3px 9px; border-radius:9px; font-family:'Nunito',sans-serif; }
+.t-rank  { font-size:18px; font-weight:900; color:rgba(255,255,255,0.6); font-family:'Nunito',sans-serif; }
+.t-title { font-size:22px; font-weight:900; color:white; line-height:1.1; text-align:center; font-family:'Nunito',sans-serif; }
+.t-sub   { font-size:10px; font-weight:800; color:#00d4aa; letter-spacing:1.5px; font-family:'Nunito',sans-serif; }
+.t-sub-rn{ color:#00d4f7; }
+
+.card-body { padding:12px 14px; }
+.c-name   { font-size:14px; font-weight:800; color:#111; margin-bottom:3px; line-height:1.3; font-family:'Nunito',sans-serif; }
+.c-author { font-size:12px; color:#bbb; font-weight:600; margin-bottom:10px; font-family:'Nunito',sans-serif; }
+.c-foot   { display:flex; align-items:center; justify-content:space-between; }
+.c-rating { display:flex; align-items:center; gap:4px; font-size:13px; font-weight:700; color:#111; font-family:'Nunito',sans-serif; }
+.c-star   { color:#f59e0b; }
+.c-price  { font-size:11px; font-weight:700; color:#6c63ff; margin-top:1px; font-family:'Nunito',sans-serif; }
+.c-btn { background:#eeeaff; color:#6c63ff; border:none; border-radius:12px; padding:8px 16px; font-size:12px; font-weight:800; cursor:pointer; font-family:'Nunito',sans-serif; }
+
+.tabbar {
+  flex-shrink: 0;
+  height: 82px;
+  background: white;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  padding: 10px 8px 0;
+  position: relative;
+  border-bottom-left-radius: 46px;
+  border-bottom-right-radius: 46px;
+}
+.tabbar::after {
+  content:'';
+  position:absolute;
+  bottom:7px; left:50%; transform:translateX(-50%);
+  width:118px; height:4px;
+  background:#000; border-radius:3px; opacity:0.15;
+}
+.tab { display:flex; flex-direction:column; align-items:center; gap:3px; min-width:60px; cursor:pointer; }
+.tab-label { font-size:10px; font-weight:700; color:#bbb; font-family:'Nunito',sans-serif; }
+.tab.active .tab-label { color:#6c63ff; }
+.tab-line { width:20px; height:3px; background:#6c63ff; border-radius:2px; margin-top:1px; }
+</style>
+</head>
+<body>
+
+<!-- ────────────────────────────────────────────────────────────────────
+     NAV
+──────────────────────────────────────────────────────────────────── -->
+<nav>
+  <a class="nav-logo" href="#s1">
+    <div class="nav-logo-mark">
+      <img src="assets/logo.png" alt="CourseAL" style="width:100%;height:100%;object-fit:cover;border-radius:7px;">
+    </div>
+    <span class="nav-logo-name">CourseAL</span>
+  </a>
+  <div class="nav-user">
+    <div class="nav-avatar">
+      <img src="assets/avatar.png" alt="User" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+    </div>
+    Арслан Әбдіқұл
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     Slide 1 — HERO
+════════════════════════════════════════════════════════════════════ -->
+<section id="s1">
+  <div class="glow glow-a"></div>
+  <div class="wrap">
+    <div class="hero-grid">
+
+      <!-- Left copy -->
+      <div>
+        <div class="eyebrow r">Платформа обучения</div>
+        <h1 class="h1 r d1">
+          Превращаем обучение<br>в <span class="ac">управляемую систему</span>
+        </h1>
+        <p class="lead r d2" style="margin-top:22px">
+          CourseAL − единая платформа, где курсы собраны в одном месте и организованы в понятную систему.
+        </p>
+        <div class="btns r d3">
+          <a href="#s5" class="btn-a" style="cursor:pointer;display:inline-flex;align-items:center;gap:8px;text-decoration:none;">
+            Изучить платформу
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+              <path d="M2.5 6.5h8M8 3.5l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          <a href="#s4" class="btn-b" style="cursor:pointer;text-decoration:none;">
+            Как это работает
+            </a>
+        </div>
+      </div>
+
+      <!-- Mockup -->
+      <div class="r d2 phone-mockup-outer">
+        <div class="phone-mockup-scale">
+          <div class="phone-wrap">
+            <div class="btn-mute"></div>
+            <div class="btn-vup"></div>
+            <div class="btn-vdn"></div>
+            <div class="btn-pwr"></div>
+
+            <div class="iphone">
+              <div class="bezel">
+                <div class="screen">
+
+                  <!-- Status bar row -->
+                  <div class="statusbar">
+                    <div class="island">
+                      <div class="island-dot"></div>
+                      <div class="island-cam"></div>
+                    </div>
+                    <span class="sb-time">9:41</span>
+                    <div class="sb-icons">
+                      <!-- Cellular signal -->
+                      <svg width="17" height="12" viewBox="0 0 17 12" fill="#111">
+                        <rect x="0"   y="7"   width="3" height="5"  rx="0.7"/>
+                        <rect x="4.6" y="4.5" width="3" height="7.5" rx="0.7"/>
+                        <rect x="9.3" y="1.5" width="3" height="10.5" rx="0.7"/>
+                        <rect x="14"  y="0"   width="3" height="12" rx="0.7" opacity="0.25"/>
+                      </svg>
+                      <!-- Wi-Fi -->
+                      <svg width="16" height="12" viewBox="0 0 16 12" fill="#111">
+                        <circle cx="8" cy="11" r="1.4"/>
+                        <path d="M4.9 7.9C5.9 6.8 6.9 6.3 8 6.3s2.1.5 3.1 1.6l1.1-1.1C10.9 5.4 9.5 4.8 8 4.8S5.1 5.4 3.8 6.8z"/>
+                        <path d="M2.2 5.1C3.7 3.4 5.7 2.4 8 2.4s4.3 1 5.8 2.7l1.1-1.1C13.1 2.2 10.7 1 8 1S2.9 2.2 1.1 4z"/>
+                      </svg>
+                      <!-- Battery -->
+                      <svg width="27" height="13" viewBox="0 0 27 13" fill="none">
+                        <rect x="0.5" y="0.5" width="22" height="12" rx="3.5" stroke="#111" stroke-opacity="0.35"/>
+                        <rect x="1.5" y="1.5" width="19" height="10" rx="2.5" fill="#111"/>
+                        <path d="M24.5 4.5v4c1.1-.5 1.1-3.5 0-4z" fill="#111" fill-opacity="0.4"/>
+                      </svg>
+                    </div>
+                  </div><!-- /statusbar -->
+
+                  <!-- Scroll content -->
+                  <div class="scroll">
+
+                    <!-- App header -->
+                    <div class="app-header">
+                      <div class="logo-box">
+                        <img src="assets/logo.png" alt="CourseAL logo">
+                      </div>
+                      <span class="app-title">CourseAL</span>
+                    </div>
+
+                    <!-- Hero -->
+                    <div class="hero">
+                      <div class="hero-badge">New on CourseAL</div>
+                      <h2>Build skills<br>that matter.</h2>
+                      <p>Video courses structured to take you<br>from beginner to confident.</p>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="filters">
+                      <button class="fbtn on">All</button>
+                      <button class="fbtn off">Science</button>
+                      <button class="fbtn off">English</button>
+                      <button class="fbtn off">ҰБТ</button>
+                    </div>
+
+                    <div class="sec-title">Courses</div>
+
+                    <!-- Card: Data Science -->
+                    <div class="card">
+                      <div class="thumb">
+                        <div class="thumb-l" style="background:linear-gradient(135deg,#0d1a2e,#091016);">
+                          <span class="t-badge">Data</span>
+                          <svg width="70" height="56" viewBox="0 0 70 56" fill="none">
+                            <rect x="6" y="4" width="58" height="38" rx="4" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+                            <rect x="10" y="8" width="50" height="30" rx="2" fill="rgba(0,200,180,0.07)"/>
+                            <polyline points="12,34 20,24 28,28 38,17 48,22 58,13" stroke="#00d4aa" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            <line x1="12" y1="26" x2="58" y2="26" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+                            <line x1="12" y1="20" x2="58" y2="20" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+                            <rect x="2" y="42" width="66" height="6" rx="2" fill="rgba(255,255,255,0.12)"/>
+                            <rect x="26" y="48" width="18" height="4" rx="2" fill="rgba(255,255,255,0.18)"/>
+                          </svg>
+                        </div>
+                        <div class="thumb-r" style="background:#0d1117;">
+                          <span class="t-rank">#1</span>
+                          <span class="t-title">DATA<br>SCIENCE</span>
+                          <span class="t-sub">[PYTHON]</span>
+                        </div>
+                      </div>
+                      <div class="card-body">
+                        <div class="c-name">Data Science / Обработка данных на Python</div>
+                        <div class="c-author">CourseAL</div>
+                        <div class="c-foot">
+                          <div>
+                            <div class="c-rating"><span class="c-star">★</span> 5.0</div>
+                            <div class="c-price">85 000тг</div>
+                          </div>
+                          <button class="c-btn">View course</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Card: React Native -->
+                    <div class="card">
+                      <div class="thumb">
+                        <div class="thumb-l" style="background:#111; position:relative;">
+                          <span class="t-badge">React Native</span>
+                          <svg width="66" height="66" viewBox="0 0 66 66" fill="none">
+                            <ellipse cx="33" cy="33" rx="30" ry="11" stroke="#00d4f7" stroke-width="1.8" opacity="0.75"/>
+                            <ellipse cx="33" cy="33" rx="30" ry="11" stroke="#00d4f7" stroke-width="1.8" transform="rotate(60 33 33)" opacity="0.75"/>
+                            <ellipse cx="33" cy="33" rx="30" ry="11" stroke="#00d4f7" stroke-width="1.8" transform="rotate(120 33 33)" opacity="0.75"/>
+                            <circle cx="33" cy="33" r="4.5" fill="#00d4f7"/>
+                          </svg>
+                        </div>
+                        <div class="thumb-r" style="background:#0a0a0a;">
+                          <span class="t-rank">#1</span>
+                          <span class="t-title t-sub-rn">REACT<br>NATIVE</span>
+                        </div>
+                      </div>
+                      <div class="card-body">
+                        <div class="c-name">React Native / Мобильная разработка</div>
+                        <div class="c-author">CourseAL</div>
+                        <div class="c-foot">
+                          <div>
+                            <div class="c-rating"><span class="c-star">★</span> 4.9</div>
+                            <div class="c-price">Free</div>
+                          </div>
+                          <button class="c-btn">View course</button>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div><!-- /scroll -->
+
+                  <!-- Tab Bar -->
+                  <div class="tabbar">
+                    <div class="tab active">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 10.8L12 3.5l9 7.3V21a1 1 0 01-1 1h-5v-5h-6v5H4a1 1 0 01-1-1v-10.2z" fill="#6c63ff"/>
+                      </svg>
+                      <span class="tab-label" style="color:#6c63ff;">Главная</span>
+                      <div class="tab-line"></div>
+                    </div>
+                    <div class="tab">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <rect x="4" y="3" width="11" height="15" rx="2" stroke="#bbb" stroke-width="1.7"/>
+                        <path d="M4 18h11" stroke="#bbb" stroke-width="1.7" stroke-linecap="round"/>
+                        <line x1="7.5" y1="3" x2="7.5" y2="18" stroke="#bbb" stroke-width="1.3" stroke-dasharray="1.5 0"/>
+                        <path d="M17 3h1a2 2 0 012 2v12a2 2 0 01-2 2h-1" stroke="#bbb" stroke-width="1.7"/>
+                        <path d="M9.5 8.5h4M9.5 11.5h3" stroke="#bbb" stroke-width="1.4" stroke-linecap="round"/>
+                      </svg>
+                      <span class="tab-label">My Courses</span>
+                    </div>
+                    <div class="tab">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="7.5" r="3.8" stroke="#bbb" stroke-width="1.7"/>
+                        <path d="M4 20c0-3.9 3.6-7 8-7s8 3.1 8 7" stroke="#bbb" stroke-width="1.7" stroke-linecap="round"/>
+                      </svg>
+                      <span class="tab-label">Профиль</span>
+                    </div>
+                  </div><!-- /tabbar -->
+
+                </div><!-- /screen -->
+              </div><!-- /bezel -->
+            </div><!-- /iphone -->
+          </div><!-- /phone-wrap -->
+        </div><!-- /phone-mockup-scale -->
+      </div><!-- /phone-mockup-outer -->
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     Slide 2 — ПРОБЛЕМА
+════════════════════════════════════════════════════════════════════ -->
+<section id="s2">
+  <div class="glow glow-b"></div>
+  <div class="wrap">
+    <div class="prob-grid">
+
+      <div>
+        <div class="eyebrow r">Проблема</div>
+        <h2 class="h2 r d1">
+          Обучение сегодня<br><span class="ac">не работает как система</span>
+        </h2>
+
+        <div class="prob-points">
+
+          <div class="prob-point r d2">
+            <div class="prob-num">01</div>
+            <div class="prob-body">
+              <strong>Контент разбросан по платформам</strong>
+              YouTube, TikTok, Instagram − пользователь сам собирает обучение из разных источников.
+            </div>
+          </div>
+
+          <div class="prob-point r d3">
+            <div class="prob-num">02</div>
+            <div class="prob-body">
+              <strong>Нет единого учебного пути</strong>
+              Материалы не связаны между собой и не формируют последовательное обучение.
+            </div>
+          </div>
+
+          <div class="prob-point r d4">
+            <div class="prob-num">03</div>
+            <div class="prob-body">
+              <strong>Прогресс не контролируется системой</strong>
+              Пользователь не понимает, где он находится и что делать дальше.
+            </div>
+          </div>
+
+          <div class="prob-point r d5">
+            <div class="prob-num">04</div>
+            <div class="prob-body">
+              <strong>Обучение не доводится до результата</strong>
+              Большинство пользователей бросают обучение до завершения.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="prob-panel r d3">
+        <div class="prob-panel-label">Типичное состояние ученика</div>
+
+        <div class="prob-row">
+          <div class="prob-dot" style="background:#FCA5A5"></div>
+          <div class="prob-row-t">Нет единой последовательности</div>
+          <div class="prob-badge" style="background:#FEF2F2;color:#DC2626">Критично</div>
+        </div>
+
+        <div class="prob-row">
+          <div class="prob-dot" style="background:#FCD34D"></div>
+          <div class="prob-row-t">Прогресс ведётся вручную</div>
+          <div class="prob-badge" style="background:#FFFBEB;color:#D97706">Высокий</div>
+        </div>
+
+        <div class="prob-row">
+          <div class="prob-dot" style="background:#FCA5A5"></div>
+          <div class="prob-row-t">3–7 несвязанных платформ</div>
+          <div class="prob-badge" style="background:#FEF2F2;color:#DC2626">Критично</div>
+        </div>
+
+        <div class="prob-row">
+          <div class="prob-dot" style="background:#FCD34D"></div>
+          <div class="prob-row-t">Каждая сессия − с нуля</div>
+          <div class="prob-badge" style="background:#FFFBEB;color:#D97706">Высокий</div>
+        </div>
+
+        <div class="prob-row">
+          <div class="prob-dot" style="background:#FCA5A5"></div>
+          <div class="prob-row-t">Обучение не доводится до конца</div>
+          <div class="prob-badge" style="background:#FEF2F2;color:#DC2626">Критично</div>
+        </div>
+
+        <div class="prob-stat">
+          <div class="prob-stat-n">~5%</div>
+          <div class="prob-stat-s">
+            пользователей доходят до конца<br>
+            самостоятельных курсов
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     Slide 3 — ПОВЕДЕНИЕ
+════════════════════════════════════════════════════════════════════ -->
+<section id="s3">
+  <div class="wrap">
+    <div class="flow-center">
+      <div class="eyebrow r" style="display:inline-block">Поведение пользователя</div>
+      <h2 class="h2 r d1" style="margin-top:16px">
+        Обучение превращается в <span class="ac">цикл без результата</span>
+      </h2>
+      <p class="lead r d2" style="margin-top:14px;text-align:center;margin-left:auto;margin-right:auto">
+        Без системы большинство попыток обучения заканчиваются одинаково − пользователь не доходит до конца.
+      </p>
+
+      <div class="flow-track r d2">
+        <div class="flow-card">
+          <div class="flow-n">1</div>
+          <div class="flow-ico">🔖</div>
+          <div class="flow-t">Сохраняет материалы</div>
+          <div class="flow-d">Контент собирается из разных источников без единой структуры</div>
+        </div>
+        <div class="flow-sep">→</div>
+        <div class="flow-card">
+          <div class="flow-n">2</div>
+          <div class="flow-ico">❓</div>
+          <div class="flow-t">Теряет контекст</div>
+          <div class="flow-d">Нарушается последовательность и понимание, что уже пройдено</div>
+        </div>
+        <div class="flow-sep">→</div>
+        <div class="flow-card">
+          <div class="flow-n">3</div>
+          <div class="flow-ico">📍</div>
+          <div class="flow-t">Теряет точку прогресса</div>
+          <div class="flow-d">Нет системы, которая помнит место остановки и следующий шаг</div>
+        </div>
+        <div class="flow-sep">→</div>
+        <div class="flow-card">
+          <div class="flow-n">4</div>
+          <div class="flow-ico">🔁</div>
+          <div class="flow-t">Возвращается к началу</div>
+          <div class="flow-d">Обучение не накапливается и каждый раз начинается почти заново</div>
+        </div>
+        <div class="flow-sep">→</div>
+        <div class="flow-card">
+          <div class="flow-n">5</div>
+          <div class="flow-ico">🚪</div>
+          <div class="flow-t">Не завершает обучение</div>
+          <div class="flow-d">Процесс обрывается до результата и цикл повторяется</div>
+        </div>
+      </div>
+
+      <div class="flow-verdict r d4">
+        <div class="flow-verdict-dot"></div>
+        <div class="flow-verdict-t">Без системы обучение почти всегда заканчивается незавершённым результатом</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     Slide 4 — РЕШЕНИЕ
+════════════════════════════════════════════════════════════════════ -->
+<section id="s4">
+  <div class="wrap">
+    <div class="sol-grid">
+
+      <div>
+        <div class="eyebrow r">Решение</div>
+        <h2 class="h2 r d1">
+          CourseAL<br>создаёт <span class="ac">систему обучения</span>
+        </h2>
+        <p class="lead r d2" style="margin-top:18px">
+          CourseAL превращает обучение в продукт с чёткой структурой, процессом и контролем прогресса.
+        </p>
+        <div class="sol-pillars">
+          <div class="sol-p r d2">
+            <div class="sol-p-ico">🗂️</div>
+            <div>
+              <div class="sol-p-t">Курсы</div>
+              <div class="sol-p-d">Структурированные образовательные продукты с логикой, целью и маршрутом</div>
+            </div>
+          </div>
+          <div class="sol-p r d3">
+            <div class="sol-p-ico">📋</div>
+            <div>
+              <div class="sol-p-t">Уроки</div>
+              <div class="sol-p-d">Последовательные шаги, которые формируют непрерывный учебный процесс</div>
+            </div>
+          </div>
+          <div class="sol-p r d4">
+            <div class="sol-p-ico">📈</div>
+            <div>
+              <div class="sol-p-t">Прогресс</div>
+              <div class="sol-p-d">Измеримый прогресс, который делает обучение понятным и контролируемым</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sol-card r d3">
+        <div class="sol-ch">
+          <div class="sol-cb">🇬🇧</div>
+          <div>
+            <div class="sol-ct">English Language: Foundations</div>
+            <div class="sol-cs">8 уроков · Структурированный путь</div>
+          </div>
+        </div>
+        <div class="sol-ls">
+          <div class="sol-l">
+            <div class="sol-lc slc-d">✓</div>
+            <div class="sol-ln sln-d">Introduction to English Thinking</div>
+            <div class="sol-dur">12 мин</div>
+          </div>
+          <div class="sol-l">
+            <div class="sol-lc slc-d">✓</div>
+            <div class="sol-ln sln-d">Basic Grammar Structures</div>
+            <div class="sol-dur">18 мин</div>
+          </div>
+          <div class="sol-l sl-a">
+            <div class="sol-lc slc-a">▸</div>
+            <div class="sol-ln" style="color:var(--accent);font-weight:700">Vocabulary & Word Building</div>
+            <div class="sol-dur">22 мин</div>
+          </div>
+          <div class="sol-l">
+            <div class="sol-lc slc-t">4</div>
+            <div class="sol-ln">Sentence Construction Principles</div>
+            <div class="sol-dur">15 мин</div>
+          </div>
+          <div class="sol-l">
+            <div class="sol-lc slc-t">5</div>
+            <div class="sol-ln">Speaking & Pronunciation Practice</div>
+            <div class="sol-dur">20 мин</div>
+          </div>
+        </div>
+        <div class="sol-prog">
+          <div class="sol-phd">
+            <div class="sol-pl">Прогресс курса</div>
+            <div class="sol-pv">37%</div>
+          </div>
+          <div class="pb"><div class="pbf" style="width:37%"></div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     Slide 5 — КАК ЭТО РАБОТАЕТ
+════════════════════════════════════════════════════════════════════ -->
+<section id="s5">
+  <div class="wrap">
+    <div class="arch-center">
+      <div class="arch-hd">
+        <div class="eyebrow r">Архитектура</div>
+        <h2 class="h2 r d1">Архитектура<br><span class="ac">управляемого обучения</span></h2>
+      </div>
+
+      <div class="arch-flow">
+        <div class="arch-step r d1">
+          <div class="arch-ico">📦</div>
+          <div class="arch-n">1</div>
+          <div class="arch-t">Источники знаний</div>
+          <div class="arch-d">Материалы из разных форматов и каналов, собранные в единую модель</div>
+        </div>
+        <div class="arch-arr r d2"><div class="arch-arr-head">→</div></div>
+        <div class="arch-step r d2">
+          <div class="arch-ico">🗂️</div>
+          <div class="arch-n">2</div>
+          <div class="arch-t">Учебная модель</div>
+          <div class="arch-d">Платформа структурирует знания в курсы с логикой, маршрутом и целью</div>
+        </div>
+        <div class="arch-arr r d3"><div class="arch-arr-head">→</div></div>
+        <div class="arch-step r d3">
+          <div class="arch-ico">📋</div>
+          <div class="arch-n">3</div>
+          <div class="arch-t">Уроки и навигация</div>
+          <div class="arch-d">Последовательные шаги с чётким порядком и точкой возобновления</div>
+        </div>
+        <div class="arch-arr r d4"><div class="arch-arr-head">→</div></div>
+        <div class="arch-step r d4">
+          <div class="arch-ico">📈</div>
+          <div class="arch-n">4</div>
+          <div class="arch-t">Прогресс и результат</div>
+          <div class="arch-d">Обучение становится последовательным, измеримым и доводимым до конца.</div>
+        </div>
+      </div>
+
+      <div class="arch-note r d5">
+        <strong>Ценность CourseAL</strong> − создаёт не просто доступ к материалам, а управляемую платформу курсов с маршрутом и прогрессом.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     Slide 6 — MVP
+════════════════════════════════════════════════════════════════════ -->
+<section id="s6">
+  <div class="wrap">
+    <div class="mvp-grid">
+
+      <div>
+        <div class="eyebrow r">Статус</div>
+        <h2 class="h2 r d1">
+          Что уже<br><span class="ac">реализовано</span>
+        </h2>
+        <p class="lead r d2" style="margin-top:18px">
+          Текущая версия продукта уже функциональна: ключевые компоненты работают и проходят тестирование.
+        </p>
+        <div class="mvp-checks">
+          <div class="mvp-check r d2">
+            <div class="mvp-ico mi-done">📱</div>
+            <div class="mvp-t">Мобильное приложение</div>
+            <div class="mvp-badge-wrap"><span class="mvp-badge">Готово</span></div>
+          </div>
+          <div class="mvp-check r d3">
+            <div class="mvp-ico mi-done">🔐</div>
+            <div class="mvp-t">Авторизация пользователей</div>
+            <div class="mvp-badge-wrap"><span class="mvp-badge">Готово</span></div>
+          </div>
+          <div class="mvp-check r d3">
+            <div class="mvp-ico mi-done">🗂️</div>
+            <div class="mvp-t">Курсы и структура</div>
+            <div class="mvp-badge-wrap"><span class="mvp-badge">Готово</span></div>
+          </div>
+          <div class="mvp-check r d4">
+            <div class="mvp-ico mi-done">📋</div>
+            <div class="mvp-t">Уроки и последовательность</div>
+            <div class="mvp-badge-wrap"><span class="mvp-badge">Готово</span></div>
+          </div>
+          <div class="mvp-check r d4">
+            <div class="mvp-ico mi-done">▶️</div>
+            <div class="mvp-t">Видеоплеер</div>
+            <div class="mvp-badge-wrap"><span class="mvp-badge">Готово</span></div>
+          </div>
+          <div class="mvp-check r d5">
+            <div class="mvp-ico mi-done">📈</div>
+            <div class="mvp-t">Отслеживание прогресса</div>
+            <div class="mvp-badge-wrap"><span class="mvp-badge">Готово</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mvp-panel r d3">
+        <div class="mvp-live">
+          <div class="mvp-live-dot"></div>
+          Активная разработка
+        </div>
+        <div class="mvp-big-l">Статус MVP</div>
+        <div class="mvp-big">Live</div>
+        <div class="mvp-big-s">Основной продукт функционален</div>
+        <div class="mvp-sep"></div>
+        <div class="mvp-metrics">
+          <div style="text-align:center">
+            <div class="mvp-m-v">6</div>
+            <div class="mvp-m-l">Модулей готово</div>
+          </div>
+          <div style="text-align:center">
+            <div class="mvp-m-v">Flutter</div>
+            <div class="mvp-m-l">Технология</div>
+          </div>
+          <div style="text-align:center">
+            <div class="mvp-m-v">v1</div>
+            <div class="mvp-m-l">Версия</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     Slide 7 — ПАРТНЁРЫ
+════════════════════════════════════════════════════════════════════ -->
+<section id="s7">
+  <div class="wrap">
+    <div class="tech-center">
+      <div class="tech-hd">
+        <div class="eyebrow r">Партнёры</div>
+        <h2 class="h2 r d1">Уже есть авторы курсов</h2>
+        <p class="lead r d2" style="margin-top:14px;text-align:center;margin-left:auto;margin-right:auto">
+          Платформа уже привлекает авторов и формирует контентную базу
+        </p>
+      </div>
+      <div class="tech-grid r d2">
+        <div class="tech-card">
+          <div class="tech-logo" style="background:#EEF2FF">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path d="M16 4C9.37 4 4 9.37 4 16s5.37 12 12 12 12-5.37 12-12S22.63 4 16 4zm0 4a4 4 0 110 8 4 4 0 010-8zm0 17c-3.33 0-6.29-1.7-8-4.28.04-2.65 5.34-4.11 8-4.11 2.65 0 7.96 1.46 8 4.11C22.29 23.3 19.33 25 16 25z" fill="#6c63ff"/>
+            </svg>
+          </div>
+          <div class="tech-name">Договорённости с авторами</div>
+          <div class="tech-role" style="color:#6c63ff">12 авторов</div>
+          <div class="tech-desc">Заключены договорённости с 12 авторами курсов</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-logo" style="background:#FFF0F0">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <rect x="4" y="6" width="24" height="18" rx="3" stroke="#DC2626" stroke-width="2"/>
+              <path d="M13 11.5l8 4.5-8 4.5v-9z" fill="#DC2626"/>
+            </svg>
+          </div>
+          <div class="tech-name">Готовый контент</div>
+          <div class="tech-role" style="color:#DC2626">YouTube интеграция</div>
+          <div class="tech-desc">Курсы с YouTube будут интегрированы в платформу</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-logo" style="background:#F0FDF4">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path d="M6 16h20M16 6l10 10-10 10" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="tech-name">Дальнейшее партнёрство</div>
+          <div class="tech-role" style="color:#16A34A">В процессе</div>
+          <div class="tech-desc">Ведутся переговоры о расширении сети авторов</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     Slide 8 — ТЕХНОЛОГИЧЕСКАЯ БАЗА
+════════════════════════════════════════════════════════════════════ -->
+<section id="s8">
+  <div class="wrap">
+    <div class="tech-center">
+      <div class="tech-hd">
+        <div class="eyebrow r">Технологии</div>
+        <h2 class="h2 r d1">
+          Технологическая<br><span class="ac">база</span>
+        </h2>
+        <p class="lead r d2" style="margin-top:14px;text-align:center;margin-left:auto;margin-right:auto">
+          Технологическая база выбрана так, чтобы продукт можно было быстро развивать и масштабировать.
+        </p>
+      </div>
+      <div class="tech-grid r d2">
+
+        <div class="tech-card tc-flutter">
+          <div class="tech-logo" style="background:#E8F4FF">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path d="M18.5 4L6 16.5l4.5 4.5L28 4h-9.5z" fill="#54C5F8"/>
+              <path d="M10.5 21L6 16.5 16.5 28h9.5L10.5 21z" fill="#0468D7"/>
+              <path d="M10.5 21l6 6L26 28l-9-9-6.5 2z" fill="#00569E"/>
+            </svg>
+          </div>
+          <div class="tech-name">Flutter</div>
+          <div class="tech-role">UI Framework</div>
+          <div class="tech-desc">Кроссплатформенная разработка мобильного приложения. Один код − iOS, Android и Web.</div>
+          <div class="tech-tag" style="background:#EFF8FF;color:#0468D7">Мобильное приложение</div>
+        </div>
+
+        <div class="tech-card tc-supabase">
+          <div class="tech-logo" style="background:#ECFDF5">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path d="M17 4L6 20h10v8l10-16H16V4h1z" fill="url(#sb-grad)"/>
+              <defs>
+                <linearGradient id="sb-grad" x1="6" y1="4" x2="26" y2="28" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#3ECF8E"/>
+                  <stop offset="1" stop-color="#1A7A4A"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="tech-name">Supabase</div>
+          <div class="tech-role">Backend & Auth</div>
+          <div class="tech-desc">Авторизация, база данных, хранилище. Полноценный backend без инфраструктуры.</div>
+          <div class="tech-tag" style="background:#ECFDF5;color:#16A34A">Backend-as-a-Service</div>
+        </div>
+
+        <div class="tech-card tc-yt">
+          <div class="tech-logo" style="background:#FFF0F0">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <rect x="2" y="7" width="28" height="18" rx="5" fill="#FF0000"/>
+              <path d="M13 12l8 4-8 4V12z" fill="white"/>
+            </svg>
+          </div>
+          <div class="tech-name">YouTube</div>
+          <div class="tech-role">Стартовый канал контента</div>
+          <div class="tech-desc">Используется как быстрый источник наполнения на этапе запуска платформы.</div>
+          <div class="tech-tag" style="background:#FFF0F0;color:#DC2626">Контент-слой</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     Slide 9 — ДОКАЗАТЕЛЬСТВО
+════════════════════════════════════════════════════════════════════ -->
+<section id="s10">
+  <div class="wrap">
+    <div class="concl-grid">
+
+      <div>
+        <div class="eyebrow r">Доказательство</div>
+        <h2 class="h2 r d1">
+          Что уже<br><span class="ac">доказано</span>
+        </h2>
+        <div class="concl-points">
+          <div class="concl-point r d2">
+            <div class="concl-bar"></div>
+            <div class="concl-text">
+              <strong>Полный цикл обучения уже реализован</strong> Пользователь проходит путь от курса до прогресса внутри платформы
+            </div>
+          </div>
+          <div class="concl-point r d3">
+            <div class="concl-bar"></div>
+            <div class="concl-text">
+              <strong>Пользовательский путь контролируется системой</strong> Платформа фиксирует прогресс и следующий шаг
+            </div>
+          </div>
+          <div class="concl-point r d4">
+            <div class="concl-bar"></div>
+            <div class="concl-text"><strong>Структура влияет на поведение пользователя</strong> Обучение становится последовательным, а не хаотичным
+            </div>
+          </div>
+          <div class="concl-point r d5">
+            <div class="concl-bar"></div>
+            <div class="concl-text">
+              <strong>Платформа готова к расширению</strong> Следующий шаг − авторы и монетизация
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="concl-panel r d3">
+        <div class="concl-panel-label">Ключевые результаты</div>
+        <div class="concl-check-row">
+          <div class="concl-check-ico" style="background:#DCFCE7">✅</div>
+          <div>
+            <div class="concl-check-t">Гипотеза подтверждена</div>
+            <div class="concl-check-s">Пользователи нуждаются в структуре, а не только в контенте</div>
+          </div>
+        </div>
+        <div class="concl-check-row">
+          <div class="concl-check-ico" style="background:#DCFCE7">✅</div>
+          <div>
+            <div class="concl-check-t">Техническое ядро построено</div>
+            <div class="concl-check-s">Flutter + Supabase работают в продакшне</div>
+          </div>
+        </div>
+        <div class="concl-check-row">
+          <div class="concl-check-ico" style="background:#DCFCE7">✅</div>
+          <div>
+            <div class="concl-check-t">Продуктовая логика ясна</div>
+            <div class="concl-check-s">Путь от контента к прогрессу определён и реализован</div>
+          </div>
+        </div>
+        <div class="concl-check-row">
+          <div class="concl-check-ico" style="background:#FEF9C3">🔄</div>
+          <div>
+            <div class="concl-check-t">Платформа готова к масштабированию</div>
+            <div class="concl-check-s">Авторы, монетизация, рынок − следующий этап</div>
+          </div>
+        </div>
+        <div class="concl-quote">
+          Это не просто прототип.<br>
+          <strong>Это работающий продукт с понятным путём к росту.</strong>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     Slide 10 — СЛЕДУЮЩИЙ ЭТАП
+════════════════════════════════════════════════════════════════════ -->
+<section id="s10">
+  <div class="wrap">
+    <div class="next-center">
+      <div class="next-hd">
+        <div class="eyebrow r">Развитие</div>
+        <h2 class="h2 r d1">Следующий этап<br><span class="ac">масштабирования</span></h2>
+        <p class="lead r d2" style="margin-top:14px;text-align:center;margin-left:auto;margin-right:auto">
+          Четыре направления, которые переведут продукт из доказательства концепции в полноценную платформу.
+        </p>
+      </div>
+
+      <div class="next-grid">
+        <div class="next-item r d1">
+          <div class="next-node">✍️</div>
+          <div class="next-card">
+            <div class="next-t">Собственные курсы и авторский кабинет</div>
+            <div class="next-d">Авторы создают и публикуют курсы прямо на платформе с редактором и аналитикой</div>
+            <div class="next-tag" style="background:#EEF2FF;color:var(--accent)">Ближайшее</div>
+          </div>
+        </div>
+        <div class="next-item r d2">
+          <div class="next-node">💳</div>
+          <div class="next-card">
+            <div class="next-t">Платная модель и управляемая монетизация</div>
+            <div class="next-d">Подписка, продажа курсов, freemium − поверх уже подтверждённого удержания</div>
+            <div class="next-tag" style="background:#EDE9FE;color:#7C3AED">Ближайшее</div>
+          </div>
+        </div>
+        <div class="next-item r d3">
+          <div class="next-node">🏗️</div>
+          <div class="next-card">
+            <div class="next-t">Собственная backend-инфраструктура</div>
+            <div class="next-d">Переход от внешних зависимостей к собственному контентному и технологическому слою</div>
+            <div class="next-tag" style="background:#ECFEFF;color:#0891B2">Среднесрочное</div>
+          </div>
+        </div>
+        <div class="next-item r d4">
+          <div class="next-node">🤖</div>
+          <div class="next-card">
+            <div class="next-t">AI-рекомендации, персонализация, аналитика удержания</div>
+            <div class="next-d">Интеллектуальный слой, адаптирующий обучение под поведение и цели каждого пользователя</div>
+            <div class="next-tag" style="background:#F0FDF4;color:#10B981">Долгосрочное</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     Slide 11 — МОНЕТИЗАЦИЯ
+════════════════════════════════════════════════════════════════════ -->
+<section id="s11">
+  <div class="wrap">
+    <div class="mono-grid">
+
+      <div>
+        <div class="eyebrow r">Бизнес-модель</div>
+        <h2 class="h2 r d1">
+          Как это будет<br><span class="ac">зарабатывать</span>
+        </h2>
+        <div class="mono-statement r d2" style="margin-top:24px">
+          Три уровня монетизации − от бесплатного входа до платформенного масштаба.
+        </div>
+        <div class="mono-note r d3">
+          Монетизация строится поверх уже подтверждённой ценности продукта: сначала сценарий использования, затем платные модели роста.
+        </div>
+      </div>
+
+      <div class="mono-cards">
+        <div class="mono-tier r d2">
+          <div class="mono-tier-bar" style="background:var(--accent)"></div>
+          <div class="mono-tier-hd">
+            <div class="mono-tier-ico" style="background:#EEF2FF">🎁</div>
+            <div>
+              <div class="mono-tier-name">Freemium</div>
+              <div class="mono-tier-price">Бесплатно · Ограниченный доступ</div>
+            </div>
+          </div>
+          <div class="mono-tier-d">Базовый доступ к курсам и урокам. Снижает барьер входа и формирует аудиторию.</div>
+        </div>
+        <div class="mono-tier r d3">
+          <div class="mono-tier-bar" style="background:var(--violet)"></div>
+          <div class="mono-tier-hd">
+            <div class="mono-tier-ico" style="background:#EDE9FE">⭐</div>
+            <div>
+              <div class="mono-tier-name">Подписка</div>
+              <div class="mono-tier-price">Ежемесячно · Полный доступ</div>
+            </div>
+          </div>
+          <div class="mono-tier-d">Неограниченные курсы, прогресс-аналитика, приоритетные обновления. Основной источник дохода.</div>
+        </div>
+        <div class="mono-tier r d4">
+          <div class="mono-tier-bar" style="background:#0891B2"></div>
+          <div class="mono-tier-hd">
+            <div class="mono-tier-ico" style="background:#ECFEFF">🏪</div>
+            <div>
+              <div class="mono-tier-name">Продажа курсов</div>
+              <div class="mono-tier-price">Разово · Авторская модель</div>
+            </div>
+          </div>
+          <div class="mono-tier-d">Авторы продают свои курсы, платформа берёт комиссию. Масштабируется без увеличения затрат.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     Slide 12 — ФИНАЛ  (dark)
+════════════════════════════════════════════════════════════════════ -->
+<section id="s12">
+  <div class="closing-bg-glow"></div>
+  <div class="wrap">
+    <div class="closing-center">
+
+      <div class="closing-mark r">
+        <img src="assets/logo.png" alt="CourseAL" style="width:54px;height:54px;object-fit:cover;border-radius:10px;">
+      </div>
+
+      <div class="eyebrow r d1">CourseAL</div>
+
+      <h1 class="closing-h r d2">
+        Будущее обучения —<br>это <span style="color:#A5B4FC">структура</span>
+      </h1>
+
+      <p class="closing-sub r d3">
+        Не больше материалов.<br>
+        <strong>А лучше управляемое обучение.</strong>
+      </p>
+
+      <div class="closing-brand r d4">CourseAL</div>
+      <div class="closing-tag-line r d5">Связаться по проекту и сотрудничеству</div>
+
+      <div class="r d6" style="margin-top:36px;display:flex;flex-direction:column;align-items:center;gap:22px">
+        
+        <div style="
+          display:grid;
+          grid-template-columns:repeat(2,minmax(180px,220px));
+          gap:22px;
+          justify-content:center;
+          align-items:start;
+        ">
+          
+          <div style="
+            background:rgba(255,255,255,0.06);
+            border:1px solid rgba(255,255,255,0.08);
+            border-radius:20px;
+            padding:18px 18px 16px;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            gap:12px;
+            box-shadow:0 10px 36px rgba(0,0,0,0.22);
+            backdrop-filter:blur(10px);
+          ">
+            <img src="assets/qr.png" alt="WhatsApp QR" style="
+              width:180px;
+              height:180px;
+              border-radius:16px;
+              box-shadow:0 6px 24px rgba(0,0,0,0.28);
+              object-fit:cover;
+              background:#fff;
+            ">
+            <div style="
+              font-size:14px;
+              font-weight:600;
+              color:rgba(255,255,255,0.92);
+              letter-spacing:.01em;
+              text-align:center;
+            ">
+              WhatsApp
+            </div>
+          </div>
+
+          <div style="
+            background:rgba(255,255,255,0.06);
+            border:1px solid rgba(255,255,255,0.08);
+            border-radius:20px;
+            padding:18px 18px 16px;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            gap:12px;
+            box-shadow:0 10px 36px rgba(0,0,0,0.22);
+            backdrop-filter:blur(10px);
+          ">
+            <img src="assets/qrhttps.png" alt="Web presentation QR" style="
+              width:180px;
+              height:180px;
+              border-radius:16px;
+              box-shadow:0 6px 24px rgba(0,0,0,0.28);
+              object-fit:cover;
+              background:#fff;
+            ">
+            <div style="
+              font-size:14px;
+              font-weight:600;
+              color:rgba(255,255,255,0.92);
+              letter-spacing:.01em;
+              text-align:center;
+            ">
+              Веб версия презентации
+            </div>
+          </div>
+
+        </div>
+
+        <div style="
+          display:flex;
+          flex-direction:column;
+          align-items:center;
+          gap:8px;
+          margin-top:4px;
+        ">
+          <div style="
+            font-size:13px;
+            color:rgba(255,255,255,0.56);
+            letter-spacing:0.01em;
+            text-align:center;
+          ">
+            arslanabdiqul08@gmail.com
+          </div>
+
+          <a href="https://github.com/milord-x" target="_blank" rel="noopener noreferrer" style="
+            font-size:13px;
+            color:rgba(165,180,252,0.95);
+            text-decoration:none;
+            letter-spacing:0.01em;
+            border-bottom:1px solid rgba(165,180,252,0.28);
+            padding-bottom:2px;
+            transition:opacity .2s ease,border-color .2s ease;
+          " onmouseover="this.style.opacity='0.82';this.style.borderColor='rgba(165,180,252,0.6)'" onmouseout="this.style.opacity='1';this.style.borderColor='rgba(165,180,252,0.28)'">
+            github.com/milord-x
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ────────────────────────────────────────────────────────────────────
+     SCROLL REVEAL
+──────────────────────────────────────────────────────────────────── -->
+<script>
+(function(){
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting) e.target.classList.add('v');
+    });
+  },{threshold:0.09,rootMargin:'0px 0px -28px 0px'});
+  document.querySelectorAll('.r').forEach(function(el){io.observe(el)});
+})();
+</script>
+
+</body>
+</html>

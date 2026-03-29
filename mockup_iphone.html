@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CourseAL iPhone</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  min-height: 100vh;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Nunito', sans-serif;
+  padding: 40px;
+}
+
+/* ========= IPHONE FRAME ========= */
+.phone-wrap {
+  position: relative;
+  /* side buttons left */
+  padding: 0 4px;
+  filter: drop-shadow(0 40px 80px rgba(0,0,0,0.20)) drop-shadow(0 10px 24px rgba(0,0,0,0.12));
+}
+
+/* left buttons */
+.phone-wrap::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 116px;
+  width: 4px;
+  height: 30px;
+  background: linear-gradient(to right, #555, #888, #555);
+  border-radius: 3px 0 0 3px;
+  box-shadow: 0 52px 0 linear-gradient(to right, #555, #888, #555),
+              0 104px 0 rgba(100,100,100,0.9);
+}
+.btn-mute  { position:absolute; left:0; top:116px; width:4px; height:30px; background:linear-gradient(90deg,#555,#888,#555); border-radius:3px 0 0 3px; }
+.btn-vup   { position:absolute; left:0; top:164px; width:4px; height:58px; background:linear-gradient(90deg,#555,#888,#555); border-radius:3px 0 0 3px; }
+.btn-vdn   { position:absolute; left:0; top:238px; width:4px; height:58px; background:linear-gradient(90deg,#555,#888,#555); border-radius:3px 0 0 3px; }
+/* right power */
+.btn-pwr   { position:absolute; right:0; top:188px; width:4px; height:76px; background:linear-gradient(270deg,#555,#888,#555); border-radius:0 3px 3px 0; }
+
+.iphone {
+  position: relative;
+  width: 390px;
+  height: 844px;
+  border-radius: 54px;
+  background: linear-gradient(150deg, #3c3c3e 0%, #1c1c1e 40%, #2c2c2e 70%, #3c3c3e 100%);
+  box-shadow:
+    inset 0 0 0 1.5px rgba(255,255,255,0.18),
+    inset 0 0 0 3px rgba(0,0,0,0.6),
+    0 0 0 1px #000;
+  overflow: visible;
+}
+
+/* sheen */
+.iphone::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 54px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.10) 0%, transparent 50%, rgba(255,255,255,0.04) 100%);
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* black bezel */
+.bezel {
+  position: absolute;
+  top: 7px; left: 7px; right: 7px; bottom: 7px;
+  background: #000;
+  border-radius: 48px;
+  overflow: hidden;
+}
+
+/* screen */
+.screen {
+  position: absolute;
+  top: 2px; left: 2px; right: 2px; bottom: 2px;
+  background: #eef0f5;
+  border-radius: 46px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========= DYNAMIC ISLAND ========= */
+.island {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 122px;
+  height: 35px;
+  background: #000;
+  border-radius: 18px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  pointer-events: none;
+}
+.island-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: #0d0d0d;
+  box-shadow: 0 0 6px rgba(60,150,255,0.5);
+}
+.island-cam {
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: #111;
+  box-shadow: 0 0 0 2px #1e2028, inset 0 0 4px rgba(60,120,255,0.4);
+}
+
+/* ========= STATUS BAR ========= */
+/* Same row as Dynamic Island: time on left, icons on right */
+.statusbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 59px;
+  padding: 0 22px;
+  flex-shrink: 0;
+  position: relative;   /* island is absolute inside this */
+  z-index: 10;
+}
+.sb-time {
+  font-size: 15px;
+  font-weight: 800;
+  color: #111;
+  letter-spacing: -0.3px;
+}
+.sb-icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ========= SCROLL AREA ========= */
+.scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+.scroll::-webkit-scrollbar { display: none; }
+
+/* ========= APP HEADER ========= */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 18px 14px;
+}
+.logo-box {
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #6c63ff, #9b87f5);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 3px 10px rgba(108,99,255,0.35);
+  flex-shrink: 0;
+}
+.logo-box img { width:100%; height:100%; object-fit:cover; }
+.logo-box svg { width:22px; height:22px; fill:white; }
+.app-title { font-size: 18px; font-weight: 800; color: #111; }
+
+/* ========= HERO ========= */
+.hero {
+  margin: 0 14px 18px;
+  background: linear-gradient(135deg, #6c63ff 0%, #9683f5 55%, #c4b5fd 100%);
+  border-radius: 20px;
+  padding: 18px 18px 22px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 28px rgba(108,99,255,0.28);
+}
+.hero::before {
+  content:'';
+  position:absolute; top:-35px; right:-25px;
+  width:130px; height:130px;
+  background:rgba(255,255,255,0.08);
+  border-radius:50%;
+}
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.2);
+  color: white;
+  font-size: 11px; font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(255,255,255,0.28);
+}
+.hero h2 { font-size:24px; font-weight:900; color:white; line-height:1.2; margin-bottom:6px; }
+.hero p  { font-size:12px; color:rgba(255,255,255,0.85); line-height:1.5; }
+
+/* ========= FILTERS ========= */
+.filters { display:flex; gap:10px; padding:0 18px 16px; }
+.fbtn {
+  padding: 8px 20px; border-radius:30px;
+  font-size:13px; font-weight:700;
+  border: none; cursor:pointer;
+  font-family:'Nunito',sans-serif;
+}
+.fbtn.on  { background:#6c63ff; color:white; box-shadow:0 4px 12px rgba(108,99,255,0.35); }
+.fbtn.off { background:white; color:#333; box-shadow:0 2px 8px rgba(0,0,0,0.09); }
+
+/* ========= SECTION TITLE ========= */
+.sec-title { font-size:19px; font-weight:900; color:#111; padding:0 18px 12px; }
+
+/* ========= COURSE CARD ========= */
+.card {
+  margin: 0 14px 14px;
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+}
+.thumb {
+  width:100%; height:160px;
+  display:flex;
+}
+.thumb-l {
+  width:50%; height:100%;
+  display:flex; align-items:center; justify-content:center;
+  position:relative;
+}
+.thumb-r {
+  width:50%; height:100%;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  gap:3px;
+}
+.t-badge {
+  position:absolute; top:9px; left:9px;
+  background:rgba(255,255,255,0.15);
+  color:white; font-size:10px; font-weight:700;
+  padding:3px 9px; border-radius:9px;
+}
+.t-rank  { font-size:18px; font-weight:900; color:rgba(255,255,255,0.6); }
+.t-title { font-size:22px; font-weight:900; color:white; line-height:1.1; text-align:center; }
+.t-sub   { font-size:10px; font-weight:800; color:#00d4aa; letter-spacing:1.5px; }
+.t-sub-rn{ color:#00d4f7; }
+
+.card-body { padding:12px 14px; }
+.c-name   { font-size:14px; font-weight:800; color:#111; margin-bottom:3px; line-height:1.3; }
+.c-author { font-size:12px; color:#bbb; font-weight:600; margin-bottom:10px; }
+.c-foot   { display:flex; align-items:center; justify-content:space-between; }
+.c-rating { display:flex; align-items:center; gap:4px; font-size:13px; font-weight:700; color:#111; }
+.c-star   { color:#f59e0b; }
+.c-price  { font-size:11px; font-weight:700; color:#6c63ff; margin-top:1px; }
+.c-btn {
+  background:#eeeaff; color:#6c63ff;
+  border:none; border-radius:12px;
+  padding:8px 16px; font-size:12px; font-weight:800;
+  cursor:pointer; font-family:'Nunito',sans-serif;
+}
+
+/* ========= TAB BAR ========= */
+.tabbar {
+  flex-shrink: 0;
+  height: 82px;
+  background: white;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  padding: 10px 8px 0;
+  position: relative;
+  border-bottom-left-radius: 46px;
+  border-bottom-right-radius: 46px;
+}
+/* home indicator */
+.tabbar::after {
+  content:'';
+  position:absolute;
+  bottom:7px; left:50%; transform:translateX(-50%);
+  width:118px; height:4px;
+  background:#000; border-radius:3px; opacity:0.15;
+}
+.tab {
+  display:flex; flex-direction:column;
+  align-items:center; gap:3px;
+  min-width:60px; cursor:pointer;
+}
+.tab-label { font-size:10px; font-weight:700; color:#bbb; }
+.tab.active .tab-label { color:#6c63ff; }
+.tab-line {
+  width:20px; height:3px;
+  background:#6c63ff; border-radius:2px;
+  margin-top:1px;
+}
+</style>
+</head>
+<body>
+
+<div class="phone-wrap">
+  <div class="btn-mute"></div>
+  <div class="btn-vup"></div>
+  <div class="btn-vdn"></div>
+  <div class="btn-pwr"></div>
+
+  <div class="iphone">
+    <div class="bezel">
+      <div class="screen">
+
+        <!-- Status bar row (island is absolute inside) -->
+        <div class="statusbar">
+          <div class="island">
+            <div class="island-dot"></div>
+            <div class="island-cam"></div>
+          </div>
+          <span class="sb-time">9:41</span>
+          <div class="sb-icons">
+            <!-- Cellular signal -->
+            <svg width="17" height="12" viewBox="0 0 17 12" fill="#111">
+              <rect x="0"   y="7"   width="3" height="5"  rx="0.7"/>
+              <rect x="4.6" y="4.5" width="3" height="7.5" rx="0.7"/>
+              <rect x="9.3" y="1.5" width="3" height="10.5" rx="0.7"/>
+              <rect x="14"  y="0"   width="3" height="12" rx="0.7" opacity="0.25"/>
+            </svg>
+            <!-- Wi-Fi -->
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="#111">
+              <circle cx="8" cy="11" r="1.4"/>
+              <path d="M4.9 7.9C5.9 6.8 6.9 6.3 8 6.3s2.1.5 3.1 1.6l1.1-1.1C10.9 5.4 9.5 4.8 8 4.8S5.1 5.4 3.8 6.8z"/>
+              <path d="M2.2 5.1C3.7 3.4 5.7 2.4 8 2.4s4.3 1 5.8 2.7l1.1-1.1C13.1 2.2 10.7 1 8 1S2.9 2.2 1.1 4z"/>
+            </svg>
+            <!-- Battery -->
+            <svg width="27" height="13" viewBox="0 0 27 13" fill="none">
+              <rect x="0.5" y="0.5" width="22" height="12" rx="3.5" stroke="#111" stroke-opacity="0.35"/>
+              <rect x="1.5" y="1.5" width="19" height="10" rx="2.5" fill="#111"/>
+              <path d="M24.5 4.5v4c1.1-.5 1.1-3.5 0-4z" fill="#111" fill-opacity="0.4"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Scroll content -->
+        <div class="scroll">
+
+          <!-- App header -->
+          <div class="app-header">
+            <div class="logo-box">
+              <img src="/logo.png" alt="logo"
+                onerror="this.style.display='none'">
+            </div>
+            <span class="app-title">CourseAL</span>
+          </div>
+
+          <!-- Hero -->
+          <div class="hero">
+            <div class="hero-badge">New on CourseAL</div>
+            <h2>Build skills<br>that matter.</h2>
+            <p>Video courses structured to take you<br>from beginner to confident.</p>
+          </div>
+
+          <!-- Filters -->
+          <div class="filters">
+            <button class="fbtn on">All</button>
+            <button class="fbtn off">React Native</button>
+          </div>
+
+          <div class="sec-title">Courses</div>
+
+          <!-- Card: Data Science -->
+          <div class="card">
+            <div class="thumb">
+              <div class="thumb-l" style="background:linear-gradient(135deg,#0d1a2e,#091016);">
+                <span class="t-badge">Data</span>
+                <svg width="70" height="56" viewBox="0 0 70 56" fill="none">
+                  <rect x="6" y="4" width="58" height="38" rx="4" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+                  <rect x="10" y="8" width="50" height="30" rx="2" fill="rgba(0,200,180,0.07)"/>
+                  <polyline points="12,34 20,24 28,28 38,17 48,22 58,13"
+                    stroke="#00d4aa" stroke-width="2" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+                  <line x1="12" y1="26" x2="58" y2="26" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+                  <line x1="12" y1="20" x2="58" y2="20" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+                  <rect x="2" y="42" width="66" height="6" rx="2" fill="rgba(255,255,255,0.12)"/>
+                  <rect x="26" y="48" width="18" height="4" rx="2" fill="rgba(255,255,255,0.18)"/>
+                </svg>
+              </div>
+              <div class="thumb-r" style="background:#0d1117;">
+                <span class="t-rank">#1</span>
+                <span class="t-title">DATA<br>SCIENCE</span>
+                <span class="t-sub">[PYTHON]</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="c-name">Data Science / Обработка данных на Python</div>
+              <div class="c-author">CourseAL</div>
+              <div class="c-foot">
+                <div>
+                  <div class="c-rating"><span class="c-star">★</span> 5.0</div>
+                  <div class="c-price">0 KZT</div>
+                </div>
+                <button class="c-btn">View course</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card: React Native -->
+          <div class="card">
+            <div class="thumb">
+              <div class="thumb-l" style="background:#111; position:relative;">
+                <span class="t-badge">React Native</span>
+                <svg width="66" height="66" viewBox="0 0 66 66" fill="none">
+                  <ellipse cx="33" cy="33" rx="30" ry="11" stroke="#00d4f7" stroke-width="1.8" opacity="0.75"/>
+                  <ellipse cx="33" cy="33" rx="30" ry="11" stroke="#00d4f7" stroke-width="1.8" transform="rotate(60 33 33)" opacity="0.75"/>
+                  <ellipse cx="33" cy="33" rx="30" ry="11" stroke="#00d4f7" stroke-width="1.8" transform="rotate(120 33 33)" opacity="0.75"/>
+                  <circle cx="33" cy="33" r="4.5" fill="#00d4f7"/>
+                </svg>
+              </div>
+              <div class="thumb-r" style="background:#0a0a0a;">
+                <span class="t-rank">#1</span>
+                <span class="t-title t-sub-rn">REACT<br>NATIVE</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="c-name">React Native / Мобильная разработка</div>
+              <div class="c-author">CourseAL</div>
+              <div class="c-foot">
+                <div>
+                  <div class="c-rating"><span class="c-star">★</span> 4.9</div>
+                  <div class="c-price">0 KZT</div>
+                </div>
+                <button class="c-btn">View course</button>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /scroll -->
+
+        <!-- Tab Bar -->
+        <div class="tabbar">
+
+          <!-- Home -->
+          <div class="tab active">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M3 10.8L12 3.5l9 7.3V21a1 1 0 01-1 1h-5v-5h-6v5H4a1 1 0 01-1-1v-10.2z"
+                fill="#6c63ff"/>
+            </svg>
+            <span class="tab-label" style="color:#6c63ff;">Главная</span>
+            <div class="tab-line"></div>
+          </div>
+
+          <!-- My Courses -->
+          <div class="tab">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <rect x="4" y="3" width="11" height="15" rx="2" stroke="#bbb" stroke-width="1.7"/>
+              <path d="M4 18h11" stroke="#bbb" stroke-width="1.7" stroke-linecap="round"/>
+              <line x1="7.5" y1="3" x2="7.5" y2="18" stroke="#bbb" stroke-width="1.3" stroke-dasharray="1.5 0"/>
+              <path d="M17 3h1a2 2 0 012 2v12a2 2 0 01-2 2h-1" stroke="#bbb" stroke-width="1.7"/>
+              <path d="M9.5 8.5h4M9.5 11.5h3" stroke="#bbb" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+            <span class="tab-label">My Courses</span>
+          </div>
+
+          <!-- Profile -->
+          <div class="tab">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="7.5" r="3.8" stroke="#bbb" stroke-width="1.7"/>
+              <path d="M4 20c0-3.9 3.6-7 8-7s8 3.1 8 7"
+                stroke="#bbb" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+            <span class="tab-label">Профиль</span>
+          </div>
+
+        </div>
+
+      </div><!-- /screen -->
+    </div><!-- /bezel -->
+  </div><!-- /iphone -->
+</div><!-- /phone-wrap -->
+
+</body>
+</html>
