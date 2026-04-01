@@ -516,6 +516,30 @@ em{font-style:normal;color:var(--t1);font-weight:700}
 .arch-note strong{color:var(--t1)}
 
 /* ─────────────────────────────────────────────────────────────────────
+   SLIDE 6-INNOVATION — MARKET DIFFERENTIATION
+───────────────────────────────────────────────────────────────────── */
+.innov-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;width:100%}
+.innov-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r2);box-shadow:var(--sh1);
+  padding:18px 20px 16px;
+  position:relative;overflow:hidden;
+}
+.innov-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent),var(--violet));
+}
+.innov-card-hd{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.innov-ico{
+  width:28px;height:28px;border-radius:8px;flex-shrink:0;
+  background:var(--accent-bg);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;
+}
+.innov-t{font-size:14.5px;font-weight:700;color:var(--t1);letter-spacing:-.02em}
+.innov-d{font-size:13px;color:var(--t2);line-height:1.55}
+
+/* ─────────────────────────────────────────────────────────────────────
    SLIDE 6 — MVP
 ───────────────────────────────────────────────────────────────────── */
 .mvp-grid{display:grid;grid-template-columns:5fr 4fr;gap:80px;align-items:center}
@@ -805,6 +829,7 @@ em{font-style:normal;color:var(--t1);font-weight:700}
   .mono-grid{grid-template-columns:1fr;gap:40px}
   .hero-grid .phone-outer{display:none}
   .tech-grid{grid-template-columns:1fr}
+  .innov-grid{grid-template-columns:1fr}
   .next-grid{grid-template-columns:1fr 1fr}
   .next-grid::before{display:none}
   .flow-track{overflow-x:auto;padding-bottom:12px}
@@ -1570,7 +1595,59 @@ em{font-style:normal;color:var(--t1);font-weight:700}
 </section>
 
 <!-- ════════════════════════════════════════════════════════════════════
-     Slide 6 — MVP
+     Slide 6 — INNOVATION
+════════════════════════════════════════════════════════════════════ -->
+<section id="s6-innovation">
+  <div class="wrap">
+    <div class="tech-center">
+      <div class="tech-hd" style="margin-bottom:32px">
+        <div class="eyebrow r">Инновационность</div>
+        <h2 class="h2 r d1">Почему существующие платформы<br><span class="ac">не решают проблему</span></h2>
+        <p class="lead r d2" style="margin-top:12px;text-align:center;margin-left:auto;margin-right:auto;max-width:480px">
+          Глобальные платформы дают контент, но не дают управляемое обучение
+        </p>
+      </div>
+
+      <div class="innov-grid">
+        <div class="innov-card r d2">
+          <div class="innov-card-hd">
+            <div class="innov-ico">🇰🇿</div>
+            <div class="innov-t">Не адаптированы под локальный рынок</div>
+          </div>
+          <div class="innov-d">Контент и структура не учитывают рынок Казахстана, язык и поведение пользователей</div>
+        </div>
+        <div class="innov-card r d3">
+          <div class="innov-card-hd">
+            <div class="innov-ico">🗂️</div>
+            <div class="innov-t">Избыток контента без маршрута</div>
+          </div>
+          <div class="innov-d">Тысячи курсов без чёткого пути обучения</div>
+        </div>
+        <div class="innov-card r d4">
+          <div class="innov-card-hd">
+            <div class="innov-ico">🤝</div>
+            <div class="innov-t">Пользователь сам собирает обучение</div>
+          </div>
+          <div class="innov-d">Выбор, порядок и контроль полностью лежат на пользователе</div>
+        </div>
+        <div class="innov-card r d5">
+          <div class="innov-card-hd">
+            <div class="innov-ico">🧭</div>
+            <div class="innov-t">Низкое завершение обучения</div>
+          </div>
+          <div class="innov-d">Без структуры пользователи не доводят обучение до результата</div>
+        </div>
+      </div>
+
+      <div class="arch-note r d6" style="margin-top:24px;max-width:620px">
+        CourseAL решает не проблему контента, а проблему прохождения обучения
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     Slide 7 — MVP
 ════════════════════════════════════════════════════════════════════ -->
 <section id="s6">
   <div class="wrap">
@@ -1767,7 +1844,7 @@ em{font-style:normal;color:var(--t1);font-weight:700}
 <!-- ════════════════════════════════════════════════════════════════════
      Slide 9 — ДОКАЗАТЕЛЬСТВО
 ════════════════════════════════════════════════════════════════════ -->
-<section id="s10">
+<section id="s9">
   <div class="wrap">
     <div class="concl-grid">
 
